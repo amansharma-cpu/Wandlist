@@ -1,0 +1,346 @@
+<% layout("/layout/boilerplate") %>
+<body>
+  <br />
+  <div class="row">
+    <div class="col-6 offset-3">
+      <h3 style="text-align: center"><%= listing.title %></h3>
+      <br />
+     </div>
+    <div class="card col-6 offset-3 show-card listing-card">
+      <img
+        src="<%= listing.image %>"
+        class="card-img-top show-img"
+        alt="image not visible"
+      />
+      <div class="card-body">
+        <p class="card-text">
+          <b>Owned by <%= listing.owner.username %></b><br />
+          <%= listing.description %> <br />
+          &#8377;<%= listing.price.toLocaleString("en-IN") %>/day <br />
+          <%= listing.location %> <br />
+          <%= listing.country %> <br />
+        </p>
+      </div>
+    </div>
+    
+
+    <br />
+    <div class="row">
+      <div class="col-8 offset-2 ">
+        <div class="adding">
+          <div class="btns ml-5">
+            <a
+              href="/listings/<%= listing._id %>/edit"
+              class="btn btn-dark col-1 offset-2 edit"
+              >Edit</a
+            >
+            <form
+              method="POST"
+              action="/listings/<%= listing._id %>?_method=DELETE"
+            >
+              <button class="btn btn-dark offset-5">Delete</button>
+            </form>
+          </div>
+       
+          <div class="counts">
+            <div class="berry">
+              <div id="price" data-base-price="<%= listing.price %>">
+                &#8377;<%= listing.price.toLocaleString("en-IN") %>/day
+              </div>
+              <div class="calender">
+                <div class="starting">Check in</div>
+                <div class="starting ending">Check out</div>
+              </div>
+
+              <div class="guests-section">
+                <div class="guests-header" id="guests-header">
+                  <div class="guests-summary-labels">
+                    <span class="guests-label">GUESTS</span>
+                    <span class="guests-count-summary" id="guests-count-summary"
+                      >1 guest</span
+                    >
+                  </div>
+                  <span class="arrow-icon" id="arrow-icon">&#9660;</span>
+                </div>
+
+                <div class="guests-content" id="guests-content">
+                  <div class="guest-type-row">
+                    <div class="guest-label-section">
+                      <p class="type-name">Adults</p>
+                      <p class="age-range">Age 13+</p>
+                    </div>
+                    <div class="counter-section">
+                      <button class="decrement-btn" data-type="adult">-</button>
+                      <span class="count" id="adult-count">1</span>
+                      <button class="increment-btn" data-type="adult">+</button>
+                    </div>
+                  </div>
+
+                  <div class="guest-type-row">
+                    <div class="guest-label-section">
+                      <p class="type-name">Children</p>
+                      <p class="age-range">Ages 2–12</p>
+                    </div>
+                    <div class="counter-section">
+                      <button class="decrement-btn" data-type="child">-</button>
+                      <span class="count" id="child-count">0</span>
+                      <button class="increment-btn" data-type="child">+</button>
+                    </div>
+                  </div>
+
+                  <div class="guest-type-row">
+                    <div class="guest-label-section">
+                      <p class="type-name">Infants</p>
+                      <p class="age-range">Under 2</p>
+                    </div>
+                    <div class="counter-section">
+                      <button class="decrement-btn" data-type="infant">
+                        -
+                      </button>
+                      <span class="count" id="infant-count">0</span>
+                      <button class="increment-btn" data-type="infant">
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="guest-type-row">
+                    <div class="guest-label-section">
+                      <p class="type-name">Pets</p>
+                    </div>
+                    <div class="counter-section">
+                      <button class="decrement-btn" data-type="pet">-</button>
+                      <span class="count" id="pet-count">0</span>
+                      <button class="increment-btn" data-type="pet">+</button>
+                    </div>
+                  </div>
+
+                  <form action="/card" method="get" id="bookingForm">
+                    <input type="hidden" name="guests" id="guests-input" />
+                    <input type="hidden" name="infants" id="infants-input" />
+                    <input type="hidden" name="pets" id="pets-input" />
+                    <input type="hidden" name="price" id="price-input" />
+                    <button type="submit" class="btn btn-danger">
+                      Book now
+                    </button>
+                  </form> </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="col-8 offset-3 mb-3">
+    <h4>Leave a review</h4>
+    <form
+      action="/listings/<%= listing.id %>/reviews"
+      method="post"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <input
+          type="range"
+          min="1"
+          max="5"
+          id="rating"
+          name="review[rating]"
+          class="form-range"
+        />
+      </div>
+      <div class="mb-3 mt-3">
+        <label for="coment" class="form-label">Comment</label>
+        <textarea
+          name="review[comment]"
+          id="coment"
+          cols="20"
+          rows="5"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please add some review</div>
+      </div>
+      <button>Submit</button>
+    </form>
+    <hr />
+    <h3>All reviews</h3>
+    <div class="row">
+      <% for (review of listing.reviews) { %>
+      <div class="card col-5 mb-3 ms-3">
+        <div class="card-body">
+          <h5 class="card-title">Unknown</h5>
+          <p class="card-text"><%= review.comment %></p>
+          <p class="card-text"><b><%= review.rating %> star</b></p>
+        </div>
+        <form
+          method="post"
+          class="mb-3"
+          action="/listings/<%= listing.id %>/reviews/<%= review._id %>?_method=DELETE"
+        >
+          <button class="btn btn-dark btn-sm">Delete</button>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="cover offset-2 ">
+    <div><h1>Related location</h1></div>
+    <div class="card col-8 mb-3 ms-3 setu">
+      <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-2">
+        <% for (let listing of newlist) { %>
+        <a href="/listings/<%= listing._id %>" class="link">
+          <div class="card col listing-card">
+            <img
+              src="<%= listing.image %>"
+              class="card-img-top"
+              alt="listing_image"
+              style="height: 18rem"
+            />
+            <div class="card-img-overlay">click to see in detail</div>
+            <div class="card-body">
+              <p class="card-text">
+                <b><%= listing.title %> </b><br />
+                &#8377; <%= listing.price.toLocaleString("en-IN") %>/day
+                &nbsp;&nbsp;<i>+18% GST</i>
+              </p>
+            </div>
+          </div>
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  let sum = 0;
+  document.addEventListener("DOMContentLoaded", () => {
+    const guestsHeader = document.getElementById("guests-header");
+    const guestsContent = document.getElementById("guests-content");
+    const arrowIcon = document.getElementById("arrow-icon");
+    const guestsCountSummary = document.getElementById("guests-count-summary");
+
+    const adultCountSpan = document.getElementById("adult-count");
+    const childCountSpan = document.getElementById("child-count");
+    const infantCountSpan = document.getElementById("infant-count");
+    const petCountSpan = document.getElementById("pet-count");
+
+    const decrementBtns = document.querySelectorAll(".decrement-btn");
+    const incrementBtns = document.querySelectorAll(".increment-btn");
+
+    let adultCount = parseInt(adultCountSpan.textContent);
+    let childCount = parseInt(childCountSpan.textContent);
+    let infantCount = parseInt(infantCountSpan.textContent);
+    let petCount = parseInt(petCountSpan.textContent);
+
+    const MIN_ADULTS = 1;
+
+    function updateGuestCounts() {
+      adultCountSpan.textContent = adultCount;
+      childCountSpan.textContent = childCount;
+      infantCountSpan.textContent = infantCount;
+      petCountSpan.textContent = petCount;
+
+      let totalGuests = adultCount + childCount;
+      let summaryParts = [];
+
+      if (totalGuests === 1) {
+        summaryParts.push("1 guest");
+      } else if (totalGuests > 1) {
+        summaryParts.push(`${totalGuests} guests`);
+      }
+
+      if (infantCount === 1) {
+        summaryParts.push("1 infant");
+      } else if (infantCount > 1) {
+        summaryParts.push(`${infantCount} infants`);
+      }
+
+      if (petCount === 1) {
+        summaryParts.push("1 pet");
+      } else if (petCount > 1) {
+        summaryParts.push(`${petCount} pets`);
+      }
+
+      let price = document.getElementById("price");
+      let basePricePerGuest = parseInt(price.dataset.basePrice);
+
+      let totalGuest1s = adultCount + childCount;
+      let guestPrice = basePricePerGuest * (1 + 0.7 * (totalGuest1s - 1));
+      let infantPrice = infantCount * 300;
+      let petPrice = petCount * 400;
+
+      let totalPrice = Math.floor(guestPrice + infantPrice + petPrice);
+      price.innerText = "₹" + totalPrice.toLocaleString("en-IN") + "/day";
+
+      document
+        .getElementById("bookingForm")
+        .addEventListener("submit", function () {
+          document.getElementById("guests-input").value =
+            adultCount + childCount;
+          document.getElementById("infants-input").value = infantCount;
+          document.getElementById("pets-input").value = petCount;
+          document.getElementById("price-input").value = totalPrice;
+        });
+
+      guestsCountSummary.textContent = summaryParts.length
+        ? summaryParts.join(", ")
+        : "Add guests";
+    }
+
+    guestsHeader.addEventListener("click", () => {
+      guestsHeader.classList.toggle("expanded");
+      guestsContent.classList.toggle("expanded");
+      if (guestsContent.classList.contains("expanded")) {
+        guestsContent.style.maxHeight = guestsContent.scrollHeight + "px";
+      } else {
+        guestsContent.style.maxHeight = "0";
+      }
+    });
+
+    decrementBtns.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const type = button.dataset.type;
+        if (type === "adult" && adultCount > MIN_ADULTS) {
+          adultCount--;
+        } else if (type === "child" && childCount > 0) {
+          childCount--;
+        } else if (type === "infant" && infantCount > 0) {
+          infantCount--;
+        } else if (type === "pet" && petCount > 0) {
+          petCount--;
+        }
+        updateGuestCounts();
+      });
+    });
+
+    incrementBtns.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const type = button.dataset.type;
+        if (type === "adult" && adultCount < 5) {
+          adultCount++;
+        } else if (type === "child" && childCount < 10) {
+          childCount++;
+        } else if (type === "infant" && infantCount < 5) {
+          infantCount++;
+        } else if (type === "pet" && petCount < 3) {
+          petCount++;
+        }
+        updateGuestCounts();
+      });
+    });
+
+    updateGuestCounts();
+  });
+</script>

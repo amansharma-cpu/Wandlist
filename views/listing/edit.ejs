@@ -1,0 +1,70 @@
+<% layout("/layout/boilerplate") %>
+<body>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <h3>Edit your Listing</h3>
+      <form method="POST" action="/listings/<%= listing._id %>?_method=PUT">
+        <div class="mb-3">
+          <b><label for="title" class="form-label">Title</label></b>
+          <input
+            name="listing[title]"
+            value="<%= listing.title %>"
+            type="text"
+            class="form-control"
+          />
+        </div>
+
+        <div class="mb-3">
+          <b><label for="description" class="form-label">Description</label></b>
+          <textarea name="listing[description]" class="form-control">
+          <%= listing.description %></textarea
+          >
+        </div>
+
+        <div class="mb-3">
+          <b><label for="image" class="form-label">Image link</label></b>
+          <input
+            name="listing[image]"
+            class="form-control"
+            value="<%= listing.image %>"
+            type="text"
+          />
+        </div>
+        <div class="row">
+          <div class="mb-3 col-md-4">
+            <b><label for="price" class="form-label">Price</label></b>
+            <input
+              name="listing[price]"
+              value="<%= listing.price %>"
+              type="number"
+              class="form-control"
+            />
+          </div>
+
+          <div class="mb-3 col-md-8">
+            <b><label for="country" class="form-label">Country</label></b>
+            <input
+              name="listing[country]"
+              value="<%= listing.country %>"
+              type="text"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <b><label for="location" class="form-label">Location</label></b>
+          <input
+            name="listing[location]"
+            value="<%= listing.location %>"
+            type="text"
+            class="form-control"
+          />
+        </div>
+        <br />
+
+        <button class="btn btn-dark">Edit</button><br /><br />
+      </form>
+    </div>
+  </div>
+</body>
